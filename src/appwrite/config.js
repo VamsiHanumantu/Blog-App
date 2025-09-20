@@ -113,6 +113,8 @@ export class Service{
     }
 }
 
+export default appWriteService = new Service();
+
 
 
 
