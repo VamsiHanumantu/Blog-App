@@ -12,11 +12,13 @@ const Post = () => {
   const navigate = useNavigate()
   const userData = useSelector((state)=>state.auth.userData)
   const isAuthor = post && userData ? post.userId === userData.$id:false 
-
+  const [imageUrl, setImageUrl] = useState("");
   useEffect(()=>{
     if(slug){
+      console.log(slug)
       appWriteService.getPost(slug).then((post)=>{
         if(post){
+          console.log(post)
           setPost(post)
         }else{
           navigate("/")
@@ -24,6 +26,17 @@ const Post = () => {
       })
     }
   },[slug,navigate])
+
+useEffect(() => {
+  const fetchImage = async () => {
+    if (post?.featuredImage) {
+      const url = await appWriteService.getFilePreview(post.featuredImage);
+      setImageUrl(url);
+    }
+  };
+  fetchImage();
+}, [post]);
+
 
   const deletePost = ()=>{
    appWriteService.deletePost(post.$id).then((status)=>{
@@ -37,13 +50,13 @@ const Post = () => {
     <div className='py-8'>
       <Container>
         <div className=' w-full flex justify-center mb-4 relative border rounded-xl p-2'>
-          <img src={appWriteService.getFilePreview(post.featuredImage)} alt={post.title} className='rounded-xl'/>
+          <img src={imageUrl} alt={post.title} className='rounded-xl'/>
           {isAuthor && (
             <div className=' absolute-right-6 top-6'>
               <Link to={`/edit-post/${post.$id}`} >
                 <Button bgColor='bg-green-500' classname='mr-3'>Edit</Button>
               </Link>
-             <Button bg-color= 'bg-red-500' onclick= {deletePost} >
+              <Button bgColor= 'bg-red-500' onClick= {deletePost} >
                 Delete
              </Button>           
             </div>

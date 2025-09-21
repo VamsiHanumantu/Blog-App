@@ -16,7 +16,7 @@ export class Service{
 
     async getPost(slug){
         try{
-            this.tablesDB.getRow(
+           return await this.tablesDB.getRow(
                 conf.appwriteDatabaseId,
                 conf.appwriteTableId,
                 slug
@@ -28,8 +28,9 @@ export class Service{
 
     async getPosts(queries = [Query.equal("stutus","active")]){
         try{
-           return await this.tablesDB.listRows(conf.appwriteDatabaseId,
+           return await this.tablesDB.listRows(
                 conf.appwriteDatabaseId,
+                conf.appwriteTableId,
                 queries
             )
         }catch(err){
@@ -42,9 +43,9 @@ export class Service{
             return await this.tablesDB.createRow(
                 conf.appwriteDatabaseId,
                 conf.appwriteTableId,
-                slug,
+                ID.unique(),
                 {
-                    title, content, featuredImage, status, userID
+                    title, content, featuredImage, status, userId:userID
                 }
             )
         }catch(err){
@@ -105,12 +106,16 @@ export class Service{
         }
     }
 
-    getFilePreview(fileID){
-        return this.bucket.getFilePreview(
-            conf.appwriteBucketId,
-            fileID
-        )
+    async getFilePreview(fileID) {
+        try {
+            // Returns a URL string directly usable in img src
+            return this.bucket.getFileView(conf.appwriteBucketId, fileID);
+        } catch(err) {
+            console.log("Appwrite Service :: getFilePreview() ::", err);
+            return null;
+        }
     }
+
 }
 const appWriteService = new Service();
 export default appWriteService

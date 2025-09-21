@@ -8,8 +8,7 @@ const Home = () => {
   useEffect(()=>{
     appWriteService.getPosts([]).then((posts)=>{
       if(posts){
-        console.log(posts)
-        setPosts(posts)
+        setPosts(posts.rows)
       }
     })
   },[])

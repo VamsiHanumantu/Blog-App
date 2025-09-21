@@ -9,8 +9,8 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 const PostForm = ({post}) => {
-
-  const { register, handleSubmit, watch, setValue, control, getValues} = useForm({
+  console.log(post)
+  const { register, handleSubmit, watch, setValue, control, getValues,reset} = useForm({
     defaultValues:{
       title: post?.title || "",
       slug: post?.slug || "",
@@ -40,8 +40,9 @@ const PostForm = ({post}) => {
         if(file){
           const fileId = file.$id
           data.featuredImage = fileId
+          console.log(data)
           const dbPost = await appWriteService.createPost({
-            data,userID: userData.$id})
+            ...data,userID: userData.$id})
           if(dbPost){
             navigate(`/post/${dbPost.$id}`)
           }
@@ -53,6 +54,18 @@ const PostForm = ({post}) => {
     if(value && typeof value === "string")
       return value.trim().toLowerCase().replace(/[^a-zA-Z\d\s]+/g,'-').replace(/\s/g,"-")
   },[])
+
+  useEffect(() => {
+  if(post){
+    reset({
+      title: post.title,
+      slug: post.slug,
+      content: post.content,
+      status: post.status
+    });
+  }
+}, [post, reset]);
+
 
   useEffect(()=>{
     watch((value,{name})=>{
@@ -72,15 +85,6 @@ const PostForm = ({post}) => {
           placeholder = "Title"
           className= "mb-4"
           {...register("title", {required:true})}
-        />
-        <Input
-         label = "Slug :"
-         placeholder = "Slug"
-         className = "mb-4"
-         {...register("slug" , {required:true})}
-         onInput = {(e)=>{
-          setValue("slug", slugTransform(e.currentTarget.value), {shouldValidate:true})
-         }}
         />
         <RTE 
          label = "Content: "

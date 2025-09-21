@@ -29,7 +29,6 @@ function App() {
         <main>
         TODO:  <Outlet />
         </main>
-        <Footer />
       </div>
     </div>
   ) : null
