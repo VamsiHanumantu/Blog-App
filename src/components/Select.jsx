@@ -1,7 +1,7 @@
 import React, { forwardRef, useId } from 'react'
 
 const Select = ({
-    option,
+    options,
     label,
     className,
     ...props

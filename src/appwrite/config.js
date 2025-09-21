@@ -33,7 +33,7 @@ export class Service{
                 queries
             )
         }catch(err){
-
+            console.log("Appwrite Service :: getPosts() ::", err)
         }
     }
 
@@ -48,7 +48,7 @@ export class Service{
                 }
             )
         }catch(err){
-            console.log(err);
+             console.log("Appwrite Service :: createPost() ::", err)
         }
     }
 
@@ -61,7 +61,7 @@ export class Service{
                 { title, content,featuredImage,status }
             )
         }catch(err){
-            console.log(err)
+             console.log("Appwrite Service :: updatePost() ::", err)
         }
 
     }
@@ -74,7 +74,7 @@ export class Service{
                 slug
             )
         }catch(err){
-            console.log(err)
+             console.log("Appwrite Service :: deletePost() ::", err)
         }
 
     }
@@ -90,7 +90,7 @@ export class Service{
                 file
             )
         }catch(err){
-            console.log(err)
+             console.log("Appwrite Service :: uploadFile() ::", err)
         }
     }
 
@@ -101,7 +101,7 @@ export class Service{
                 ID.unique()
             )
         }catch(err){
-            console.log(err)
+             console.log("Appwrite Service :: deleteFile() ::", err)
         }
     }
 
@@ -112,8 +112,8 @@ export class Service{
         )
     }
 }
-
-export default appWriteService = new Service();
+const appWriteService = new Service();
+export default appWriteService
 
 
 
